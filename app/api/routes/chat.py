@@ -14,7 +14,8 @@ async def chat(request: ChatRequest):
         result = run_rag(
             request.question,
             collection_name=request.collection_name,
-            use_reranking=True  # NEW: Reranking enabled
+            session_id=request.session_id,  # NEW
+            use_reranking=True
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"RAG pipeline failed: {str(e)}")

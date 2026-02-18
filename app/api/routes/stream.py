@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.post("/chat/stream")
 async def chat_stream(request: ChatRequest):
-    """Streaming chat endpoint - returns tokens as they're generated."""
+    """Streaming chat endpoint with conversation memory."""
     if not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
@@ -17,6 +17,7 @@ async def chat_stream(request: ChatRequest):
             run_rag_streaming(
                 request.question,
                 collection_name=request.collection_name,
+                session_id=request.session_id,  # NEW
                 use_reranking=True
             ),
             media_type="text/event-stream"
