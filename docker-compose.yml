@@ -1,0 +1,33 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    networks:
+      - rag-net
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: rag-app
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - qdrant
+    volumes:
+      - ./app:/app
+    networks:
+      - rag-net
+
+networks:
+  rag-net:
+    driver: bridge

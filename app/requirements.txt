@@ -1,0 +1,26 @@
+# API
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.12
+
+# LangChain
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-openai==0.2.6
+
+# Embeddings
+sentence-transformers==3.3.1
+
+# Vector Store
+qdrant-client==1.12.0
+
+# PDF Parsing
+pymupdf==1.24.13
+
+# Config & Validation
+pydantic==2.10.0
+pydantic-settings==2.6.1
+
+# Utils
+python-dotenv==1.0.1
+httpx==0.27.2
