@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import fitz
 from pathlib import Path
 
 

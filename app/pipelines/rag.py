@@ -2,9 +2,9 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from app.services.embedder import embed_query
-from app.services.vector_store import search
-from app.core.config import get_settings
+from services.embedder import embed_query
+from services.vector_store import search
+from core.config import get_settings
 import logging
 
 logger = logging.getLogger("rag_agent")

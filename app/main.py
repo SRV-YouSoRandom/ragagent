@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.core.logging import setup_logging
-from app.api.routes import ingest, chat
-from app.services.vector_store import ensure_collection
+from core.logging import setup_logging
+from api.routes import ingest, chat
+from services.vector_store import ensure_collection
 import logging
 
 setup_logging()

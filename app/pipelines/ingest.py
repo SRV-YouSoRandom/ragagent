@@ -1,8 +1,8 @@
-from app.services.parser import parse_pdf
-from app.services.chunker import chunk_text
-from app.services.embedder import embed_texts
-from app.services.hasher import hash_chunk, hash_document
-from app.services.vector_store import ensure_collection, upsert_chunks
+from services.parser import parse_pdf
+from services.chunker import chunk_text
+from services.embedder import embed_texts
+from services.hasher import hash_chunk, hash_document
+from services.vector_store import ensure_collection, upsert_chunks
 import logging
 
 logger = logging.getLogger("rag_agent")

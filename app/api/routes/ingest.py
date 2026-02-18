@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from app.pipelines.ingest import run_ingest
-from app.schemas.ingest import IngestResponse
-from app.core.config import get_settings
+from pipelines.ingest import run_ingest
+from schemas.ingest import IngestResponse
+from core.config import get_settings
 
 router = APIRouter()
 

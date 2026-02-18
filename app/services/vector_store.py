@@ -4,7 +4,7 @@ from qdrant_client.models import (
     FieldCondition, MatchValue
 )
 from functools import lru_cache
-from app.core.config import get_settings
+from core.config import get_settings
 import logging
 
 logger = logging.getLogger("rag_agent")
