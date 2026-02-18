@@ -25,5 +25,5 @@ pydantic-settings==2.6.1
 python-dotenv==1.0.1
 httpx==0.27.2
 
-# Observability (Phase D prep)
-# langsmith==0.1.0  # Uncomment for Phase D
+# Observability (Optional - uncomment to enable LangSmith)
+langsmith==0.1.0
