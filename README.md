@@ -55,7 +55,7 @@ graph TB
     subgraph "Observability"
         Chat -.->|Metrics| Metrics[Metrics Collector]
         Stream -.->|Metrics| Metrics
-        Metrics -->|API| Dashboard[/metrics/summary]
+        Metrics -->|API| Dashboard["/metrics/summary"]
     end
 ```
 
