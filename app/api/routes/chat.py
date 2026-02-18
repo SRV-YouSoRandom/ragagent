@@ -11,7 +11,11 @@ async def chat(request: ChatRequest):
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
     try:
-        result = run_rag(request.question)
+        result = run_rag(
+            request.question,
+            collection_name=request.collection_name,
+            use_reranking=True  # NEW: Reranking enabled
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"RAG pipeline failed: {str(e)}")
 

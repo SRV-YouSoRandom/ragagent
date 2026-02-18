@@ -7,3 +7,4 @@ class IngestResponse(BaseModel):
     total_chunks: int
     new_chunks_indexed: int
     message: str
+    collection_name: str

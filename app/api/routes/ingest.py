@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from pipelines.ingest import run_ingest
 from schemas.ingest import IngestResponse
 from core.config import get_settings
@@ -7,7 +7,10 @@ router = APIRouter()
 
 
 @router.post("/ingest", response_model=IngestResponse)
-async def ingest_document(file: UploadFile = File(...)):
+async def ingest_document(
+    file: UploadFile = File(...),
+    collection_name: str = Form(None)  # NEW: Optional collection
+):
     settings = get_settings()
 
     if not file.filename.endswith(".pdf"):
@@ -23,7 +26,7 @@ async def ingest_document(file: UploadFile = File(...)):
         )
 
     try:
-        result = run_ingest(file_bytes, file.filename)
+        result = run_ingest(file_bytes, file.filename, collection_name)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:

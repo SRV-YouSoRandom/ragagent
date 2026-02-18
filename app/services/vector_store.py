@@ -17,16 +17,44 @@ def get_qdrant_client() -> QdrantClient:
     return QdrantClient(host=settings.qdrant_host, port=settings.qdrant_port)
 
 
-def ensure_collection():
+def ensure_collection(collection_name: str = None):
+    """Create collection if it doesn't exist."""
     settings = get_settings()
     client = get_qdrant_client()
+    if collection_name is None:
+        collection_name = settings.qdrant_collection
+    
     existing = [c.name for c in client.get_collections().collections]
-    if settings.qdrant_collection not in existing:
+    if collection_name not in existing:
         client.create_collection(
-            collection_name=settings.qdrant_collection,
+            collection_name=collection_name,
             vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
         )
-        logger.info(f"Created Qdrant collection: {settings.qdrant_collection}")
+        logger.info(f"Created Qdrant collection: {collection_name}")
+
+
+def list_collections() -> list[str]:
+    """List all available collections."""
+    client = get_qdrant_client()
+    return [c.name for c in client.get_collections().collections]
+
+
+def delete_collection(collection_name: str):
+    """Delete a collection."""
+    client = get_qdrant_client()
+    client.delete_collection(collection_name=collection_name)
+    logger.info(f"Deleted collection: {collection_name}")
+
+
+def get_collection_stats(collection_name: str) -> dict:
+    """Get collection statistics."""
+    client = get_qdrant_client()
+    info = client.get_collection(collection_name=collection_name)
+    return {
+        "name": collection_name,
+        "vectors_count": info.vectors_count,
+        "points_count": info.points_count,
+    }
 
 
 def upsert_chunks(
@@ -35,15 +63,18 @@ def upsert_chunks(
     chunk_hashes: list[str],
     doc_hash: str,
     filename: str,
+    collection_name: str = None,
 ):
     settings = get_settings()
     client = get_qdrant_client()
+    if collection_name is None:
+        collection_name = settings.qdrant_collection
 
     # Fetch existing hashes for this doc to skip duplicates
     existing_hashes = set()
     try:
         results, _ = client.scroll(
-            collection_name=settings.qdrant_collection,
+            collection_name=collection_name,
             scroll_filter=Filter(
                 must=[FieldCondition(key="doc_hash", match=MatchValue(value=doc_hash))]
             ),
@@ -58,7 +89,7 @@ def upsert_chunks(
     import uuid
     for chunk, embedding, chunk_hash in zip(chunks, embeddings, chunk_hashes):
         if chunk_hash in existing_hashes:
-            continue  # Skip duplicate chunks
+            continue
         points.append(
             PointStruct(
                 id=str(uuid.uuid4()),
@@ -73,19 +104,22 @@ def upsert_chunks(
         )
 
     if points:
-        client.upsert(collection_name=settings.qdrant_collection, points=points)
-        logger.info(f"Upserted {len(points)} chunks for doc: {filename}")
+        client.upsert(collection_name=collection_name, points=points)
+        logger.info(f"Upserted {len(points)} chunks to {collection_name}")
     else:
-        logger.info(f"All chunks already indexed for doc: {filename}")
+        logger.info(f"All chunks already indexed in {collection_name}")
 
     return len(points)
 
 
-def search(query_vector: list[float], top_k: int) -> list[dict]:
+def search(query_vector: list[float], top_k: int, collection_name: str = None) -> list[dict]:
     settings = get_settings()
     client = get_qdrant_client()
+    if collection_name is None:
+        collection_name = settings.qdrant_collection
+    
     results = client.search(
-        collection_name=settings.qdrant_collection,
+        collection_name=collection_name,
         query_vector=query_vector,
         limit=top_k,
         with_payload=True,

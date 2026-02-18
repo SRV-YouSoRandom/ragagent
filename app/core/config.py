@@ -8,10 +8,13 @@ class Settings(BaseSettings):
     llm_model: str = "google/gemma-3-27b-it:free"
 
     embedding_model: str = "all-MiniLM-L6-v2"
+    
+    # NEW: Reranking model
+    reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
     qdrant_host: str = "qdrant"
     qdrant_port: int = 6333
-    qdrant_collection: str = "rag_docs"
+    qdrant_collection: str = "rag_docs"  # Default collection
 
     app_env: str = "production"
     log_level: str = "INFO"
@@ -19,6 +22,9 @@ class Settings(BaseSettings):
     chunk_size: int = 512
     chunk_overlap: int = 64
     top_k: int = 5
+    
+    # NEW: Reranking settings
+    rerank_top_k: int = 3  # After reranking, keep top 3
 
     class Config:
         env_file = ".env"
