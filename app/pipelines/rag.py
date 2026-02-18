@@ -92,7 +92,8 @@ def run_rag(
         )
 
         prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a helpful assistant."),
+            # Commented out system prompt for now as it's not supported by Gemma
+            # ("system", "You are a helpful assistant."),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", PROMPT_TEMPLATE_WITH_HISTORY),
         ])
@@ -195,7 +196,8 @@ def run_rag_streaming(
         )
 
         prompt = ChatPromptTemplate.from_messages([
-            ("system", "You are a helpful assistant."),
+            # Commented out system prompt for now as it's not supported by Gemma
+            # ("system", "You are a helpful assistant."),
             MessagesPlaceholder(variable_name="chat_history"),
             ("human", PROMPT_TEMPLATE_WITH_HISTORY),
         ])
