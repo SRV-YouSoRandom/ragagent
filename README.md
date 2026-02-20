@@ -152,8 +152,8 @@ rag-agent/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/rag-agent.git
-cd rag-agent
+git clone https://github.com/SRV-YouSoRandom/ragagent.git
+cd ragagent
 
 # 2. Configure environment
 cp .env.example .env
